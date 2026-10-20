@@ -2136,6 +2136,12 @@ class DatabaseHelper extends SQLiteOpenHelper {
             loadIntegerSetting(stmt, Settings.System.POINTER_SPEED,
                     R.integer.def_pointer_speed);
 
+            final int minRefreshRate =
+                    mContext.getResources().getInteger(R.integer.def_min_refresh_rate);
+            if (minRefreshRate >= 0) {
+                loadSetting(stmt, Settings.System.MIN_REFRESH_RATE, (float) minRefreshRate);
+            }
+
             /*
              * IMPORTANT: Do not add any more upgrade steps here as the global,
              * secure, and system settings are no longer stored in a database

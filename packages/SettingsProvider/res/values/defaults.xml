@@ -360,4 +360,8 @@
     <integer name="def_tether_dun_required">0</integer>
 
     <integer name="def_ota_disable_automatic_update">1</integer>
+
+    <!-- Default for Settings.System.MIN_REFRESH_RATE, -1 leaves it unset.
+         0 lets LTPO panels idle down to their lowest refresh rate. -->
+    <integer name="def_min_refresh_rate">-1</integer>
 </resources>
