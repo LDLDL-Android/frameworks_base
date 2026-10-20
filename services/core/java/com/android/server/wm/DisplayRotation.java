@@ -569,9 +569,11 @@ public class DisplayRotation {
                             (source.asWindowState() != null &&
                                     source.asWindowState().isActivityWindow()));
 
-            // If an app explicitly requests a fixed orientation (e.g., a landscape game),
-            // allow it to override the user lock. Otherwise, preserve the user's locked rotation.
-            if (!isAppRequest || !ActivityInfo.isFixedOrientation(lastOrientation)) {
+            // If an app explicitly requests a fixed orientation (e.g., a landscape game) or to
+            // follow the sensor (e.g., a camera), allow it to override the user lock, as
+            // rotationForOrientation() does. Otherwise, preserve the user's locked rotation.
+            if (!isAppRequest || !(ActivityInfo.isFixedOrientation(lastOrientation)
+                    || isSensorOrientation(lastOrientation))) {
                 rotation = mUserRotation;
                 ProtoLog.v(WM_DEBUG_ORIENTATION,
                         "Preserving locked user rotation=%s (%d)",
@@ -1339,6 +1341,13 @@ public class DisplayRotation {
         }
 
         return mAllowAllRotations;
+    }
+
+    private static boolean isSensorOrientation(@ScreenOrientation int orientation) {
+        return orientation == ActivityInfo.SCREEN_ORIENTATION_SENSOR
+                || orientation == ActivityInfo.SCREEN_ORIENTATION_FULL_SENSOR
+                || orientation == ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE
+                || orientation == ActivityInfo.SCREEN_ORIENTATION_SENSOR_PORTRAIT;
     }
 
     private boolean getEnableLockScreenRotation() {
