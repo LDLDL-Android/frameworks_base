@@ -29,6 +29,7 @@
             app:layout_constraintStart_toStartOf="@id/begin_guide"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="@id/qqs_header_bottom_guideline"
+            app:layout_constrainedWidth="true"
             app:layout_constraintEnd_toStartOf="@id/date"
             app:layout_constraintHorizontal_bias="0"
             app:layout_constraintHorizontal_chainStyle="packed"

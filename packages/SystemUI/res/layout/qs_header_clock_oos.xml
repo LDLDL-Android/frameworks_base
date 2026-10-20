@@ -16,7 +16,6 @@
         android:layoutDirection="ltr">
 
         <TextClock
-            android:layout_marginTop="8dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:includeFontPadding="false"
@@ -29,7 +28,6 @@
             android:textStyle="bold" />
 
         <TextClock
-            android:layout_marginTop="8dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="start|center"
@@ -44,7 +42,6 @@
     </FrameLayout>
 
     <TextClock
-        android:layout_marginTop="8dp"
         android:id="@+id/oos_date"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

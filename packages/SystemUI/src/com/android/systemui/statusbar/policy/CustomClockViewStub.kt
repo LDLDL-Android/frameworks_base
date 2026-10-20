@@ -22,6 +22,7 @@ import android.os.Looper
 import android.os.UserHandle
 import android.provider.Settings
 import android.util.AttributeSet
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.FrameLayout
@@ -39,6 +40,8 @@ class CustomClockViewStub @JvmOverloads constructor(
     private var clockStyle = 0
 
     init {
+        clipChildren = false
+        clipToPadding = false
         settingsObserver = object : ContentObserver(Handler(Looper.getMainLooper())) {
             override fun onChange(selfChange: Boolean) {
                 updateLayout()
@@ -63,7 +66,14 @@ class CustomClockViewStub @JvmOverloads constructor(
         }
         if (clockStyle != 0) {
             currentClockView = LayoutInflater.from(context).inflate(layoutResId, this, false)
-            addView(currentClockView)
+            // The stub is as tall as the header row, so centre the clock in it instead of
+            // relying on per-layout top margins.
+            val lp = LayoutParams(
+                LayoutParams.WRAP_CONTENT,
+                LayoutParams.WRAP_CONTENT,
+                Gravity.START or Gravity.CENTER_VERTICAL
+            )
+            addView(currentClockView, lp)
         }
         visibility = if (clockStyle == 0) View.GONE else View.VISIBLE
         currentClockView?.visibility = if (clockStyle == 0) View.GONE else View.VISIBLE
