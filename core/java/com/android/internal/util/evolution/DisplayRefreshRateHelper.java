@@ -22,6 +22,9 @@ import java.util.Comparator;
 public class DisplayRefreshRateHelper {
 
     private static final float DEFAULT_REFRESH_RATE = 60f;
+    // LTPO panels: 0 lets ADFR idle down to its lowest rate, 30 is a fixed low floor.
+    private static final int LTPO_AUTO_MIN_REFRESH_RATE = 0;
+    private static final int LTPO_LOW_MIN_REFRESH_RATE = 30;
 
     private static DisplayRefreshRateHelper sInstance = null;
 
@@ -62,6 +65,9 @@ public class DisplayRefreshRateHelper {
         final float defaultRefreshRate = refreshRate != 0 ? (float) refreshRate : DEFAULT_REFRESH_RATE;
         final int ret = (int) Settings.System.getFloatForUser(mContext.getContentResolver(),
                 MIN_REFRESH_RATE, defaultRefreshRate, UserHandle.USER_SYSTEM);
+        if (ret == LTPO_AUTO_MIN_REFRESH_RATE || ret == LTPO_LOW_MIN_REFRESH_RATE) {
+            return ret;
+        }
         if (mRefreshRateList.size() != 0 && !mRefreshRateList.contains(ret)) {
             return mRefreshRateList.get(mRefreshRateList.size() - 1);
         }
