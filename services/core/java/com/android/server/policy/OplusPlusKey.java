@@ -11,6 +11,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
+import android.os.PowerManager;
 import android.os.UserHandle;
 import android.util.Log;
 
@@ -25,7 +26,26 @@ public final class OplusPlusKey {
     public static final String ACTION_CAMERA_TRIGGER_UP =
             PACKAGE_NAME + ".CAMERA_TRIGGER_UP";
 
+    // Covers press/long-press detection, broadcast delivery and the action itself.
+    private static final long WAKE_LOCK_TIMEOUT_MS = 5000;
+
+    private static PowerManager.WakeLock sWakeLock;
+
     private OplusPlusKey() {
+    }
+
+    /**
+     * The key wakes the CPU but not the screen. Hold a partial wake lock so the
+     * device does not suspend again before the gesture is resolved and handled.
+     */
+    public static synchronized void acquireWakeLock(Context context) {
+        if (sWakeLock == null) {
+            PowerManager pm = context.getSystemService(PowerManager.class);
+            if (pm == null) return;
+            sWakeLock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, TAG);
+            sWakeLock.setReferenceCounted(false);
+        }
+        sWakeLock.acquire(WAKE_LOCK_TIMEOUT_MS);
     }
 
     /**
@@ -60,6 +80,7 @@ public final class OplusPlusKey {
     }
 
     private static void sendPlusKeyBroadcast(Context context, String action, String logName) {
+        acquireWakeLock(context);
         try {
             Intent intent = new Intent(action)
                     .setPackage(PACKAGE_NAME)

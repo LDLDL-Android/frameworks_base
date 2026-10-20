@@ -5830,6 +5830,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
         if (OplusPlusKey.isAvailable(mContext)
                 && event.getKeyCode() == KeyEvent.KEYCODE_ASSIST) {
             if (event.getAction() == KeyEvent.ACTION_DOWN && event.getRepeatCount() == 0) {
+                OplusPlusKey.acquireWakeLock(mContext);
                 OplusPlusKey.fireCameraTriggerDown(mContext);
             } else if (event.getAction() == KeyEvent.ACTION_UP) {
                 OplusPlusKey.fireCameraTriggerUp(mContext);
